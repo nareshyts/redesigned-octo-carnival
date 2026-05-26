@@ -30,7 +30,7 @@ const (
 
 var (
     razorpayURLs = []string{
-        "https://pages.razorpay.com/examcrackaa",
+        "https://pages.razorpay.com/admighty",
     }
     urlIndex   uint64
     proxyIndex uint64
