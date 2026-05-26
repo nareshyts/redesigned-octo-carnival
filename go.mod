@@ -1,2 +1,3 @@
-go mod init razorpay-checker
-go mod tidy
+module razorpay-checker
+
+go 1.21
