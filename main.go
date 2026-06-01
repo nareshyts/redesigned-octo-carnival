@@ -30,16 +30,9 @@ const (
 
 var (
     razorpayURLs = []string{
-        "https://pages.razorpay.com/learnastrologyonline",
-"https://pages.razorpay.com/youngmind",
-"https://pages.razorpay.com/NEETSheet",
-"https://pages.razorpay.com/websitetech",
-"https://pages.razorpay.com/pitrupakshaa",
-"https://pages.razorpay.com/vvk17092022",
-"https://pages.razorpay.com/affluentindianshub",
-"https://pages.razorpay.com/sarthakagarwal",
-"https://pages.razorpay.com/TheCycleTrailKorlai",
-"https://pages.razorpay.com/everythingdigital",
+        "https://razorpay.me/brandname",
+"https://pages.razorpay.com/fees-collection",
+"https://pages.razorpay.com/donation-page"
     }
     urlIndex   uint64
     proxyIndex uint64
