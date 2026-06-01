@@ -30,9 +30,8 @@ const (
 
 var (
     razorpayURLs = []string{
-           "https://razorpay.me/brandname",
-        "https://pages.razorpay.com/fees-collection",
-        "https://pages.razorpay.com/donation-page",
+           "https://pages.razorpay.com/invoice-payment",
+        
     }
     urlIndex   uint64
     proxyIndex uint64
