@@ -34,17 +34,7 @@ const (
 
 var (
     razorpayURLs = []string{
-        "https://razorpay.me/@setblue",
-"https://razorpay.me/@findmyholidays",
-"https://razorpay.me/@corediagnostics",
-"https://razorpay.me/@tpstech",
-"https://razorpay.me/@planetpublication",
-"https://razorpay.me/@numberoneacademy",
-"https://razorpay.me/@mednucleusmedicalservices",
-"https://razorpay.me/@iiecm",
-"https://razorpay.me/@akhileshkumarsingh3748",
-"https://razorpay.me/@rudrakshakailash",
-"https://razorpay.me/@drsureshchandersachdeva",
+        "https://razorpay.me/@tpstech",
     }
     urlIndex   uint64
     proxyIndex uint64
