@@ -39,7 +39,7 @@ const (
 
 var (
     razorpayURLs = []string{
-        "https://pages.razorpay.com/lckuk-international",
+        "https://razorpay.me/@tpstech",
     }
     urlIndex   uint64
     proxyIndex uint64
